@@ -1,18 +1,61 @@
-<h2>Hello <%= @buyer.name %>,</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>FCR Payment Receipt</title>
+  </head>
 
-<p>Thank you for your payment!</p>
+  <body style="margin: 0; padding: 0; background-color: #f4f0f8; font-family: 'Helvetica Neue', Arial, sans-serif;">
+    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
 
-<p>
-  <strong>Plan:</strong> <%= @plan.name %><br>
-  <strong>Transaction Type:</strong> <%= @transaction.transaction_type.humanize %><br>
-  <strong>Amount:</strong> Rs<%= @transaction.amount %><br>
-  <strong>Date:</strong> <%= @transaction.transaction_date.strftime("%B %d, %Y") %>
-</p>
+      <!-- Header -->
+      <div style="background: linear-gradient(90deg, #5a0d69, #a020f0); padding: 25px; color: #ffffff; text-align: center;">
+        <h1 style="margin: 0; font-size: 26px; letter-spacing: 1px;">FCR Billing System</h1>
+        <p style="margin: 0; font-size: 15px; opacity: 0.9;">Official Payment Receipt</p>
+      </div>
 
-<p>
-  This invoice was generated automatically for your active subscription.
-</p>
+      <!-- Body -->
+      <div style="padding: 30px;">
+        <h2 style="color: #5a0d69;">Hello <%= @buyer.name %>,</h2>
+        <p style="font-size: 16px; color: #444; line-height: 1.6;">
+          Thank you for your payment! Below are your transaction details:
+        </p>
 
-<p>Best regards,<br>
-FCR</p>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+          <tr style="background-color: #f9f5ff;">
+            <td style="padding: 12px; font-weight: bold; color: #5a0d69;">Plan:</td>
+            <td style="padding: 12px; color: #333;"><%= @plan.name %></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: bold; color: #5a0d69;">Transaction Type:</td>
+            <td style="padding: 12px; color: #333;"><%= @transaction.transaction_type.humanize %></td>
+          </tr>
+          <tr style="background-color: #f9f5ff;">
+            <td style="padding: 12px; font-weight: bold; color: #5a0d69;">Amount:</td>
+            <td style="padding: 12px; color: #333;">Rs <%= @transaction.amount %></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: bold; color: #5a0d69;">Date:</td>
+            <td style="padding: 12px; color: #333;"><%= @transaction.transaction_date.strftime("%B %d, %Y") %></td>
+          </tr>
+        </table>
 
+        <p style="margin-top: 25px; color: #555; line-height: 1.6;">
+          This invoice was generated automatically for your active FCR subscription.
+          If you have any questions, feel free to contact our support team.
+        </p>
+
+        <div style="text-align: center; margin-top: 35px;">
+          <a href="https://fcr.com" style="background: #5a0d69; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 6px; display: inline-block; font-weight: bold;">
+            Visit FCR Website
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="background: #5a0d69; padding: 15px; text-align: center; font-size: 13px; color: #e4d9ec;">
+        <p style="margin: 0;">&copy; <%= Time.current.year %> <strong>FCR</strong> – All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   scope module: "buyer" do
     get "dashboard", to: "dashboard#index", as: "buyer_dashboard"
     resource :profile, only: [:show, :edit, :update]
-    resources :subscriptions, only: [:new, :create] do
+    resources :subscriptions, only: [:new, :create,:index] do
       member do
         post "cancel"
       end
@@ -18,16 +18,23 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get "dashboard", to: "dashboard#index"
-
+    
     resources :features
     resources :plans do
       resources :plan_features, only: [:create, :destroy]
     end
+    
 
     resources :plan_features, only: [:create, :destroy]
-    resources :usages, only: [:new, :create]
+    resources :usages, only: [:new, :create] do
+      collection do
+        get :features_for_buyer
+      end
+    end
+    
     resource :profile, only: [:show, :edit, :update]
 
+    get "buyers/:buyer_id/features", to: "usages#features_for_buyer", as: "buyer_features"
     post "billing/run", to: "billing#run", as: "run_billing"
   end
 end

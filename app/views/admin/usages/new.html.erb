@@ -1,20 +1,61 @@
-<%= form_with model: [:admin, @usage], local: true do |f| %>
-  <div>
-    <%= f.label :buyer_id, "Buyer" %>
-    <%= f.collection_select :buyer_id, @buyers, :id, :name, prompt: "Select a buyer" %>
-  </div>
+<div class="d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
+  <div class="card shadow-lg p-4" style="width: 500px;">
+    <h2 class="text-center mb-4 fw-bold" style="color: #5a0d69;">Add Usage</h2>
 
-  <div>
-    <%= f.label :feature_id, "Feature" %>
-    <%= f.collection_select :feature_id, @features, :id, :name, prompt: "Select a feature" %>
-  </div>
+    <%= form_with model: [:admin, @usage], local: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :buyer_id, "Buyer", class: "form-label fw-semibold" %>
+        <%= f.collection_select :buyer_id, @buyers, :id, :name,
+              { prompt: "Select a buyer" },
+              class: "form-select", id: "buyer_select" %>
+      </div>
 
-  <div>
-    <%= f.label :units_used, "Units Used" %>
-    <%= f.number_field :units_used %>
-  </div>
+      <div class="mb-3">
+        <%= f.label :feature_id, "Feature", class: "form-label fw-semibold" %>
+        <%= f.select :feature_id, [],
+              { prompt: "Select a feature" },
+              class: "form-select", id: "feature_select" %>
+      </div>
 
-  <div>
-    <%= f.submit "Add Usage" %>
+      <div class="mb-3">
+        <%= f.label :units_used, "Units Used", class: "form-label fw-semibold" %>
+        <%= f.number_field :units_used, class: "form-control", placeholder: "Enter number of units" %>
+      </div>
+
+      <div class="text-center">
+        <%= f.submit "Add Usage", class: "btn text-white px-4", style: "background-color: #5a0d69;" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const buyerSelect = document.getElementById("buyer_select");
+    const featureSelect = document.getElementById("feature_select");
+
+    buyerSelect.addEventListener("change", function() {
+      const buyerId = this.value;
+      featureSelect.innerHTML = '<option value="">Loading...</option>';
+
+      if (buyerId) {
+        fetch(`/admin/buyers/${buyerId}/features.json`)
+          .then(response => response.json())
+          .then(features => {
+            featureSelect.innerHTML = '<option value="">Select a feature</option>';
+            features.forEach(feature => {
+              const option = document.createElement("option");
+              option.value = feature.id;
+              option.textContent = feature.name;
+              featureSelect.appendChild(option);
+            });
+          })
+          .catch(() => {
+            featureSelect.innerHTML = '<option value="">Error loading features</option>';
+          });
+      } else {
+        featureSelect.innerHTML = '<option value="">Select a buyer first</option>';
+      }
+    });
+  });
+</script>

@@ -1,15 +1,14 @@
-# app/models/admin_user.rb
 class AdminUser < User
   def charge_monthly_fee(subscription)
-    transaction=Transaction.create!(
+    transaction = Transaction.create!(
       buyer: subscription.buyer,
       subscription: subscription,
       amount: subscription.plan.monthly_fee,
       transaction_date: Date.today,
-      transaction_type: :monthly_fee
+      transaction_type: :monthly_fee,
     )
 
-      BillMailer.subscription_invoice(transaction).deliver_later
+    BillMailer.subscription_invoice(transaction).deliver_later
   end
 
   def calculate_overuse(subscription)
@@ -27,14 +26,14 @@ class AdminUser < User
     over_amount = calculate_overuse(subscription)
     return if over_amount.zero?
 
-    transaction=Transaction.create!(
+    transaction = Transaction.create!(
       buyer: subscription.buyer,
       subscription: subscription,
       amount: over_amount,
       transaction_date: Date.today,
-      transaction_type: :over_usage
+      transaction_type: :over_usage,
     )
-      BillMailer.subscription_invoice(transaction).deliver_later
+    BillMailer.subscription_invoice(transaction).deliver_later
   end
 
   def usage_add(subscription, feature, units)
@@ -42,7 +41,7 @@ class AdminUser < User
       subscription: subscription,
       feature: feature,
       units_used: units,
-      usage_date: Date.today
+      usage_date: Date.today,
     )
   end
 
@@ -50,12 +49,12 @@ class AdminUser < User
     today = Date.current
 
     Subscription.active.includes(:buyer, :plan).find_each do |subscription|
-      next unless today >= subscription.end_date
+      if today >= subscription.end_date
+        charge_monthly_fee(subscription)
+        charge_overusage(subscription)
 
-      charge_monthly_fee(subscription)
-      charge_overusage(subscription)
-
-      subscription.update!(end_date: subscription.end_date + 30.days)
+        subscription.update!(start_date: today, end_date: today + 30.days)
+      end
     end
   end
 end

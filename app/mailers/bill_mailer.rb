@@ -1,7 +1,4 @@
 class BillMailer < ApplicationMailer
-
-  default from: 'finecreditreportservices@gmail.com'
-
   def subscription_invoice(transaction)
     @transaction = transaction
     @buyer = transaction.buyer
@@ -10,7 +7,7 @@ class BillMailer < ApplicationMailer
 
     mail(
       to: @buyer.email,
-      subject: "Bill for your #{@plan.name} subscription (#{transaction.transaction_type.humanize})"
+      subject: "Bill for your #{@plan.name} subscription (#{transaction.transaction_type.humanize})",
     )
   end
 end

@@ -1,26 +1,39 @@
-<h1>📊 Usage Report</h1>
+<div class="d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
+  <div class="container" style="max-width: 900px;">
+    <h1 class="fw-bold text-center mb-4" style="color: #5a0d69;">Usage Report</h1>
 
-<% if @usages.present? %>
-  <table >
-    <thead>
-      <tr>
-        <th>Feature</th>
-        <th>Units Used</th>
-        <th>Usage Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @usages.each do |usage| %>
-        <tr>
-          <td><%= usage.feature.name %></td>
-          <td><%= usage.units_used %></td>
-          <td><%= usage.usage_date %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No usage records found.</p>
-<% end %>
+    <% if @usages.present? %>
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+          <table class="table table-hover align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>Feature</th>
+                <th>Units Used</th>
+                <th>Usage Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @usages.each do |usage| %>
+                <tr>
+                  <td class="fw-semibold" style="color:#5a0d69;"><%= usage.feature.name %></td>
+                  <td><%= usage.units_used %></td>
+                  <td><%= usage.usage_date.strftime("%B %d, %Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <p class="text-center text-muted mt-4">No usage records found.</p>
+    <% end %>
 
-<%= link_to "⬅ Back to Dashboard", buyer_dashboard_path %>
+    <div class="text-center mt-4">
+      <%= link_to "⬅ Back to Dashboard",
+          buyer_dashboard_path,
+          class: "btn text-white px-4",
+          style: "background-color: #5a0d69; border-radius: 8px;" %>
+    </div>
+  </div>
+</div>

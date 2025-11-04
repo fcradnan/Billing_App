@@ -7,7 +7,7 @@ module Buyer
 
     def ensure_buyer!
       unless current_user.is_a?(BuyerUser)
-        redirect_to admin_dashboard_path, alert: "Access denied!"
+        redirect_to admin_dashboard_path
       end
     end
   end

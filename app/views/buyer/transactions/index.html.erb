@@ -1,19 +1,41 @@
-<h1>Your Transactions</h1>
+<div class="d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
+  <div class="container" style="max-width: 900px;">
+    <h1 class="fw-bold text-center mb-4" style="color: #5a0d69;">Your Transactions</h1>
 
-<table >
-  <tr>
-    <th>Type</th>
-    <th>Amount</th>
-    <th>Date</th>
-  </tr>
+    <% if @transactions.any? %>
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+          <table class="table table-hover align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>Type</th>
+                <th>Amount (Rs)</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @transactions.each do |t| %>
+                <tr>
+                  <td><%= t.transaction_type %></td>
+                  <td class="fw-semibold <%= t.amount.to_f < 0 ? 'text-danger' : 'text-success' %>">
+                    <%= t.amount %>
+                  </td>
+                  <td><%= t.transaction_date.strftime("%B %d, %Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <p class="text-center text-muted mt-4">No transactions found.</p>
+    <% end %>
 
-  <% @transactions.each do |t| %>
-    <tr>
-      <td><%= t.transaction_type %></td>
-      <td><%= t.amount %></td>
-      <td><%= t.transaction_date %></td>
-    </tr>
-  <% end %>
-</table>
-
-<%= link_to "Back to Dashboard", buyer_dashboard_path %>
+    <div class="text-center mt-4">
+      <%= link_to "Back to Dashboard",
+          buyer_dashboard_path,
+          class: "btn text-white px-4",
+          style: "background-color: #5a0d69; border-radius: 8px;" %>
+    </div>
+  </div>
+</div>

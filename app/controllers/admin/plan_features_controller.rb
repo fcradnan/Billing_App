@@ -4,14 +4,13 @@ module Admin
 
     def create
       feature = Feature.find(params[:feature_id])
-      @plan.features << feature unless @plan.features.include?(feature)
-      redirect_to admin_plan_path(@plan), notice: "Feature added to plan successfully."
+      @plan.plan_features.find_or_create_by(feature: feature)
+      redirect_to admin_plan_path(@plan), notice: "Feature added successfully."
     end
 
     def destroy
-      plan_feature = @plan.plan_features.find(params[:id])
-      plan_feature.destroy
-      redirect_to admin_plan_path(@plan), notice: "Feature removed from plan successfully."
+      @plan.plan_features.find(params[:id]).destroy
+      redirect_to admin_plan_path(@plan), notice: "Feature removed successfully."
     end
 
     private

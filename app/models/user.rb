@@ -4,7 +4,6 @@ class User < ApplicationRecord # ok
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-
   before_validation :set_default_type, on: :create
   has_one_attached :profile_photo
 
@@ -12,10 +11,10 @@ class User < ApplicationRecord # ok
   validates :name, presence: true
 
   validates :type, presence: true, inclusion: { in: %w[AdminUser BuyerUser] }
+
   private
+
   def set_default_type
-    self.type ||= "BuyerUser"
+    self.type = "BuyerUser" if self.type.blank?
   end
 end
-
-

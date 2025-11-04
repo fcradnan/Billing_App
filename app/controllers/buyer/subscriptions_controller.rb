@@ -5,6 +5,10 @@ module Buyer
       @plans = Plan.includes(:features)
     end
 
+
+    def index
+      @subscriptions = current_user.subscriptions.includes(:plan).where(status: "active")
+    end
     def create
       authorize Subscription
       plan = Plan.find(params[:plan_id])

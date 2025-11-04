@@ -3,34 +3,58 @@ module Admin
     def new
       authorize Usage
       @usage = Usage.new
-      @buyers = BuyerUser.all
-      @features = Feature.all
+      
+      @buyers = BuyerUser.joins(:subscriptions)
+                         .where(subscriptions: { status: "active" })
+                         .distinct
+      
+      @features = []
     end
 
     def create
       authorize Usage
+
+      if usage_params[:buyer_id].blank?
+        redirect_to new_admin_usage_path, alert: "Please select a buyer." and return
+      end
+
       buyer = BuyerUser.find(usage_params[:buyer_id])
       subscription = buyer.active_subscription
 
       if subscription.nil?
-        redirect_to new_admin_usage_path, alert: "This buyer has no active subscription."
-        return
+        redirect_to new_admin_usage_path, alert: "This buyer has no active subscription." and return
       end
 
       @usage = Usage.new(
         subscription_id: subscription.id,
         feature_id: usage_params[:feature_id],
         units_used: usage_params[:units_used],
-        usage_date: Date.today,
+        usage_date: Date.today
       )
 
       if @usage.save
         redirect_to admin_dashboard_path, notice: "Usage added successfully for #{buyer.name}."
       else
-        @buyers = BuyerUser.all
-        @features = Feature.all
+        @buyers = BuyerUser.joins(:subscriptions)
+                           .where(subscriptions: { status: "active" })
+                           .distinct
+        @features = []
         render :new
       end
+    end
+
+
+    def features_for_buyer
+      buyer = BuyerUser.find(params[:buyer_id])
+      subscription = buyer.active_subscription
+
+      if subscription && subscription.plan
+        @features = subscription.plan.features
+      else
+        @features = []
+      end
+
+      render json: @features.select(:id, :name)
     end
 
     private

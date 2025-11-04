@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(90deg, #5a0d69, #7b2cbf);">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">FCR Billing</a>
+
+    <% if user_signed_in? %>
+      <div class="d-flex align-items-center ms-auto">
+        <span class="text-white me-3">
+          Welcome, <%= current_user.name %> (<%= current_user.type %>)
+        </span>
+        <%= button_to "Logout", destroy_user_session_path,
+            method: :delete,
+            data: { turbo: false },
+            class: "btn btn-outline-light btn-sm rounded-pill px-3" %>
+      </div>
+    <% end %>
+  </div>
+</nav>

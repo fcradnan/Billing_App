@@ -1,25 +1,36 @@
-<%= form_with(model: [:admin, @feature]) do |f| %>
-  <p>
-    <strong>Name:</strong>
-    <%= f.text_field :name %>
-  </p>
+<div class="container my-5">
+  <div class="card shadow-sm p-4">
+    <h2 class="fw-bold mb-4 text-center" style="color: #5a0d69;">
+      <%= @feature.new_record? ? "➕ Create New Feature" : "Edit Feature" %>
+    </h2>
 
-  <p>
-    <strong>Code:</strong>
-    <%= f.text_field :code %>
-  </p>
+    <%= form_with(model: [:admin, @feature], local: true, class: "needs-validation") do |f| %>
+      <div class="mb-3">
+        <%= f.label :name, "Feature Name", class: "form-label fw-semibold" %>
+        <%= f.text_field :name, class: "form-control", placeholder: "Enter feature name", required: true %>
+      </div>
 
-  <p>
-    <strong>Unit Price:</strong>
-    <%= f.number_field :unit_price %>
-  </p>
+      <div class="mb-3">
+        <%= f.label :code, "Feature Code", class: "form-label fw-semibold" %>
+        <%= f.text_field :code, class: "form-control", placeholder: "e.g. STORAGE_LIMIT", required: true %>
+      </div>
 
-  <p>
-    <strong>Max Limit:</strong>
-    <%= f.number_field :max_unit_limit %>
-  </p>
+      <div class="mb-3">
+        <%= f.label :unit_price, "Unit Price (PKR)", class: "form-label fw-semibold" %>
+        <%= f.number_field :unit_price, class: "form-control", step: "0.01", placeholder: "e.g. 100.00", required: true %>
+      </div>
 
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+      <div class="mb-4">
+        <%= f.label :max_unit_limit, "Maximum Units Allowed", class: "form-label fw-semibold" %>
+        <%= f.number_field :max_unit_limit, class: "form-control", placeholder: "e.g. 1000", required: true %>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <%= link_to "⬅ Back", admin_features_path, class: "btn btn-outline-secondary px-4" %>
+        <%= f.submit(@feature.new_record? ? "Create Feature" : "Update Feature",
+                     class: "btn text-white px-4",
+                     style: "background-color:#5a0d69; border-color:#5a0d69;") %>
+      </div>
+    <% end %>
+  </div>
+</div>

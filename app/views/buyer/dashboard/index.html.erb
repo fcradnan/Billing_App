@@ -1,64 +1,63 @@
-<h1>Buyer Dashboard</h1>
+<div class="container mt-5">
+  <h1 class="fw-bold text-center mb-5" style="color: #5a0d69;">Buyer Dashboard</h1>
 
-<section class="subscriptions">
-  <h3>Your Subscriptions</h3>
+  <div class="row g-4 justify-content-center">
+    <!-- Total Subscriptions -->
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 p-4">
+        <h5 class="fw-semibold text-muted">Total Subscriptions</h5>
+        <h2 class="fw-bold" style="color: #5a0d69;"><%= @subscriptions_count %></h2>
+      </div>
+    </div>
 
-  <% if @subscriptions.any? %>
-    <ul>
-      <% @subscriptions.each do |sub| %>
-        <li>
-          <strong>Plan:</strong> <%= sub.plan.name %> |
-          <strong>Status:</strong> <%= sub.status %> |
-          <strong>Started:</strong> <%= sub.start_date %>
+    <!-- Active Subscriptions -->
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 p-4">
+        <h5 class="fw-semibold text-muted">Active Subscriptions</h5>
+        <h2 class="fw-bold" style="color: #5a0d69;"><%= @active_subscriptions_count %></h2>
+      </div>
+    </div>
 
-          <% if sub.active? %>
-            <%= button_to "Cancel", cancel_subscription_path(sub), method: :post, class: "btn btn-danger btn-sm" %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p>No active subscriptions.</p>
-  <% end %>
-</section>
+    <!-- Total Transactions -->
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 p-4">
+        <h5 class="fw-semibold text-muted">Total Transactions</h5>
+        <h2 class="fw-bold " style="color: #5a0d69;"><%= @transactions_count %></h2>
+      </div>
+    </div>
 
-<hr>
+    <!-- Total Spent -->
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0 p-4">
+        <h5 class="fw-semibold text-muted">Total Spent</h5>
+        <h2 class="fw-bold " style="color: #5a0d69;"><%= number_to_currency(@total_spent, unit: "Rs ") %></h2>
+      </div>
+    </div>
+  </div>
 
-<section class="transactions">
-  <h3>Your Transactions</h3>
+  <!-- Action Buttons -->
+  <div class="text-center mt-5">
+    <%= link_to "Subscribe to New Plan", new_subscription_path,
+        class: "btn text-white px-4 me-2",
+        style: "background-color: #5a0d69; border-radius: 8px;" %>
 
-  <% if @transactions.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @transactions.each do |t| %>
-          <tr>
-            <td><%= t.transaction_type %></td>
-            <td><%= number_to_currency(t.amount) %></td>
-            <td><%= t.transaction_date %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p>No transactions found.</p>
-  <% end %>
-</section>
+    
+  <%= link_to "View Active Subscriptions",
+      subscriptions_path,
+      class: "btn text-white px-4",
+      style: "background-color:#5a0d69; border-radius:8px;" %>
 
-<hr>
 
-<nav class="dashboard-links">
-  <%= link_to "Subscribe to New Plan", new_subscription_path, class: "btn btn-primary" %> |
-  <%= link_to "View Usage Report", usage_report_path, class: "btn btn-secondary" %> |
-  <%= link_to "View Transactions", transactions_path, class: "btn btn-secondary" %>
+    <%= link_to "View Usage Report", usage_report_path,
+        class: "btn text-white px-4 me-2",
+        style: "background-color: #5a0d69; border-radius: 8px;" %>
 
-<div class="profile-link mb-3">
-  <%= link_to "Edit Profile", edit_admin_profile_path, class: "btn btn-outline-primary" %>
+    <%= link_to "View Transactions", transactions_path,
+        class: "btn text-white px-4 me-2",
+        style: "background-color: #5a0d69; border-radius: 8px;" %>
+
+    <%= link_to "Edit Profile", edit_profile_path,
+        class: "btn text-white px-4 me-2",
+        style: "background-color: #5a0d69; border-radius: 8px;" %>
+  </div>
 </div>
-</nav>

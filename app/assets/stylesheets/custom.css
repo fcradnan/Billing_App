@@ -1,0 +1,23 @@
+.card {
+  border-radius: 10px;
+}
+
+.card-title {
+  color: #2c3e50;
+}
+
+.table th {
+  background-color: #f8f9fa;
+}
+
+
+.btn-primary {
+  background-color: #5a0d69 !important;
+  border-color: #5a0d69 !important;
+}
+
+.btn-primary:hover {
+  background-color: #4a0a56 !important;
+  border-color: #4a0a56 !important;
+}
+

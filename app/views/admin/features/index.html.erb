@@ -1,32 +1,55 @@
-<h1>All Features</h1>
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold" style="color: #5a0d69;">All Features</h1>
+    <%= link_to "➕ New Feature", new_admin_feature_path,
+                class: "btn btn-primary",
+                style: "background-color:#5a0d69; border-color:#5a0d69;" %>
+  </div>
 
-<%= link_to "New Feature", new_admin_feature_path %>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Price/Unit</th>
+            <th>Limit</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Code</th>
-      <th>Price/unit</th>
-      <th>Limit</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
+        <tbody>
+          <% @features.each do |f| %>
+            <tr>
+              <td><%= f.name %></td>
+              <td><span class="badge text-bg-secondary"><%= f.code %></span></td>
+              <td>Rs <%= number_to_currency(f.unit_price, unit: "", precision: 2) %></td>
+              <td><%= f.max_unit_limit %></td>
+              <td class="text-center">
+                <div class="d-inline-flex gap-2">
+                  <%= link_to edit_admin_feature_path(f),
+                              class: "btn btn-sm btn-outline-primary d-flex align-items-center" do %>
+                    <i class="bi bi-pencil-fill me-1"></i> Edit
+                  <% end %>
 
-  <tbody>
-    <% @features.each do |f| %>
-      <tr>
-        <td><%= f.name %></td>
-        <td><%= f.code %></td>
-        <td><%= f.unit_price %></td>
-        <td><%= f.max_unit_limit %></td>
-        <td>
-          <%= link_to "Edit", edit_admin_feature_path(f) %> |
-          <%= button_to "Delete", admin_feature_path(f), method: :delete, data: { confirm: "Are you sure?" } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+                  <%= button_to admin_feature_path(f),
+                                method: :delete,
+                                data: { confirm: "Are you sure you want to delete #{f.name}?" },
+                                class: "btn btn-sm btn-outline-danger d-flex align-items-center" do %>
+                    <i class="bi bi-trash-fill me-1"></i> Delete
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<%= link_to "Back to Dashboard", admin_dashboard_path %>
+  <div class="text-center mt-4">
+    <%= link_to "⬅ Back to Dashboard", admin_dashboard_path,
+                class: "btn btn-outline-secondary" %>
+  </div>
+</div>

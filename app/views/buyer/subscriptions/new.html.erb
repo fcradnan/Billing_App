@@ -1,30 +1,51 @@
-<h1>Available Plans</h1>
+<div class="container mt-5">
+  <h1 class="fw-bold text-center mb-4" style="color: #5a0d69;">Available Plans</h1>
 
-<% if @plans.any? %>
-  <% @plans.each do |plan| %>
-    <div class="card mb-3 p-3">
-      <h4><%= plan.name %> - <%= number_to_currency(plan.monthly_fee) %>/month</h4>
+  <% if @plans.any? %>
+    <div class="row justify-content-center">
+      <% @plans.each do |plan| %>
+        <div class="col-md-6 col-lg-5">
+          <div class="card shadow-sm border-0 mb-4 p-4">
+            <h4 class="fw-bold mb-3" style="color: #5a0d69;">
+              <%= plan.name %>
+              <small class="text-muted">— Rs <%= plan.monthly_fee %>/month</small>
+            </h4>
 
-      <% if plan.features.any? %>
-        <ul>
-          <% plan.features.each do |feature| %>
-            <li>
-              <strong><%= feature.name %></strong> —
-              Limit: <%= feature.max_unit_limit %> units
-              (<%= number_to_currency(feature.unit_price) %>/unit if exceeded)
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No features defined for this plan.</p>
-      <% end %>
+            <% if plan.features.any? %>
+              <ul class="list-group list-group-flush mb-3">
+                <% plan.features.each do |feature| %>
+                  <li class="list-group-item">
+                    <strong><%= feature.name %></strong><br>
+                    Limit: <%= feature.max_unit_limit %> units
+                    <div class="text-muted small mt-1">
+                      Extra usage costs Rs <%= feature.unit_price %> per unit
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="text-muted fst-italic">No features defined for this plan.</p>
+            <% end %>
 
-      <%= form_with url: subscriptions_path, method: :post, local: true do |f| %>
-        <%= hidden_field_tag :plan_id, plan.id %>
-        <%= f.submit "Subscribe", class: "btn btn-success mt-2" %>
+            <div class="text-center">
+              <%= form_with url: subscriptions_path, method: :post, local: true do |f| %>
+                <%= hidden_field_tag :plan_id, plan.id %>
+                <%= f.submit "Subscribe",
+                    class: "btn text-white px-4",
+                    style: "background-color: #5a0d69; border-radius: 8px;" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       <% end %>
     </div>
+  <% else %>
+    <p class="text-center text-muted">No plans available at this time.</p>
   <% end %>
-<% else %>
-  <p>No plans available at this time.</p>
-<% end %>
+  <div class="text-center mt-4">
+      <%= link_to "Back to Dashboard",
+          buyer_dashboard_path,
+          class: "btn text-white px-4",
+          style: "background-color: #5a0d69; border-radius: 8px;" %>
+    </div>
+</div>

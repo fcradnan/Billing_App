@@ -1,39 +1,50 @@
-<h1>Your Subscriptions</h1>
+<div class="container mt-5">
+  <h1 class="fw-bold text-center mb-4" style="color: #5a0d69;">Your Subscriptions</h1>
 
-<table >
-  <thead>
-    <tr>
-      <th>Plan Name</th>
-      <th>Status</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @subscriptions = current_user.subscriptions.includes(:plan) %>
-    <% @subscriptions.each do |subscription| %>
+  <table class="table table-hover table-bordered text-center align-middle shadow-sm">
+    <thead class="table-dark">
       <tr>
-        <td><%= subscription.plan.name %></td>
-        <td><%= subscription.status %></td>
-        <td><%= subscription.start_date %></td>
-        <td><%= subscription.end_date || "Active" %></td>
-        <td>
-          <% if subscription.active? %>
-            <%= button_to "Cancel", cancel_subscription_path(subscription), method: :post, class: "btn btn-danger btn-sm" %>
-          <% else %>
-            <span style="color: gray;">Cancelled</span>
-          <% end %>
-        </td>
+        <th>Plan Name</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<hr>
+    <tbody>
+      <% @subscriptions = current_user.subscriptions.includes(:plan) %>
+      <% @subscriptions.each do |subscription| %>
+        <tr>
+          <td class="fw-semibold"><%= subscription.plan.name %></td>
+          <td>
+            <% if subscription.active? %>
+              <span class="badge bg-success">Active</span>
+            <% else %>
+              <span class="badge bg-secondary">Cancelled</span>
+            <% end %>
+          </td>
+          <td><%= subscription.start_date.strftime("%d %b %Y") %></td>
+          <td><%= subscription.end_date ? subscription.end_date.strftime("%d %b %Y") : "Active" %></td>
+          <td>
+            <% if subscription.active? %>
+              <%= button_to "Cancel", cancel_subscription_path(subscription), method: :post,
+                  class: "btn btn-danger btn-sm px-3" %>
+            <% else %>
+              <span style="color: gray;">Cancelled</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<div class="subscription-links">
-  <%= link_to "Subscribe to New Plan", new_subscription_path, class: "btn btn-primary" %> |
-  <%= link_to "Back to Dashboard", buyer_dashboard_path, class: "btn btn-secondary" %>
+ 
+    <div class="text-center mt-4">
+      <%= link_to "Back to Dashboard",
+          buyer_dashboard_path,
+          class: "btn text-white px-4",
+          style: "background-color: #5a0d69; border-radius: 8px;" %>
+
+  </div>
 </div>

@@ -19,7 +19,7 @@ class BuyerUser < User
       plan: plan,
       status: :active,
       start_date: Date.today,
-      end_date: Date.today + 30.days,
+      end_date: Date.today + 30.days
     )
 
     transaction = Transaction.create!(
@@ -27,7 +27,7 @@ class BuyerUser < User
       subscription: subscription,
       amount: plan.monthly_fee,
       transaction_date: Date.today,
-      transaction_type: :monthly_fee,
+      transaction_type: :monthly_fee
     )
 
     BillMailer.subscription_invoice(transaction).deliver_later

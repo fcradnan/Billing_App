@@ -1,7 +1,7 @@
 module Admin
   class DashboardController < BaseController
     def index
-      authorize :dashboard, :index?
+      authorize [:admin, :dashboard], :index?
 
       @total_buyers = BuyerUser.count
       @total_plans = Plan.count

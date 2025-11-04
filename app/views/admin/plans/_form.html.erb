@@ -1,17 +1,26 @@
-<%= form_with(model: [:admin, @plan]) do |f| %>
-  <p>
-    <strong>Name:</strong>
-    <%= f.text_field :name %>
-  </p>
-  
-  <p>
-    <strong>Monthly Fee:</strong>
-    <%= f.number_field :monthly_fee %>
-  </p>
-  
-  
-  
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+<div class="d-flex justify-content-center align-items-start pt-5" style="min-height: 90vh; background-color: #f8f9fa;">
+  <div class="card shadow-lg p-5 mt-5" style="width: 650px; border-radius: 14px;">
+    <h2 class="fw-bold mb-4 text-center" style="color: #5a0d69;">
+      <%= @plan.new_record? ? "Create New Plan" : "Edit Plan" %>
+    </h2>
+
+    <%= form_with(model: [:admin, @plan], local: true, class: "needs-validation") do |f| %>
+      <div class="mb-3">
+        <%= f.label :name, "Plan Name", class: "form-label fw-semibold" %>
+        <%= f.text_field :name, class: "form-control form-control-lg", placeholder: "e.g. Premium Plan", required: true %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :monthly_fee, "Monthly Fee (PKR)", class: "form-label fw-semibold" %>
+        <%= f.number_field :monthly_fee, class: "form-control form-control-lg", step: "0.01", placeholder: "e.g. 999.00", required: true %>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <%= link_to "⬅ Back", admin_plans_path, class: "btn btn-outline-secondary px-4 py-2" %>
+        <%= f.submit(@plan.new_record? ? "Create Plan" : "Update Plan",
+                     class: "btn text-white px-4 py-2",
+                     style: "background-color:#5a0d69; border-color:#5a0d69;") %>
+      </div>
+    <% end %>
+  </div>
+</div>

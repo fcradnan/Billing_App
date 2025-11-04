@@ -27,7 +27,7 @@
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
-
+/config/environments/development.rb
 /public/assets
 
 # Ignore master key for decrypting credentials and more.

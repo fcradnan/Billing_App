@@ -6,6 +6,6 @@ module Buyer
       @transactions = @buyer.transactions.includes(:subscription).order(created_at: :desc)
     end
 
-    private
+    
   end
 end

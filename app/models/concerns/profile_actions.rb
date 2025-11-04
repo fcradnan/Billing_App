@@ -2,7 +2,7 @@ module ProfileActions
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!
+  
     before_action :set_profile
   end
 

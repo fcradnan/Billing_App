@@ -1,5 +1,8 @@
 <h2>Plan: <%= @plan.name %></h2>
-<p><strong>Monthly Fee:</strong> <%= number_to_currency(@plan.monthly_fee) %></p>
+<p>
+  <strong>Monthly Fee:</strong> <%= number_to_currency(@plan.monthly_fee, unit: "Rs ", precision: 0) %>
+</p>
+
 
 <hr>
 
