@@ -4,79 +4,24 @@
     <p class="text-muted">Welcome to your FCR admin control panel</p>
   </div>
 
+
   <div class="row g-4 mb-4">
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0" style="background: #f9f5ff;">
-        <div class="card-body">
-          <h5 class="card-title text-secondary">Total Buyers</h5>
-          <h2 class="fw-bold" style="color: #5a0d69;"><%= @total_buyers %></h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0" style="background: #f9f5ff;">
-        <div class="card-body">
-          <h5 class="card-title text-secondary">Total Plans</h5>
-          <h2 class="fw-bold" style="color: #5a0d69;"><%= @total_plans %></h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0" style="background: #f9f5ff;">
-        <div class="card-body">
-          <h5 class="card-title text-secondary">Total Revenue</h5>
-          <h2 class="fw-bold" style="color: #5a0d69;"><%= number_with_delimiter(@total_revenue) %> PKR</h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-0" style="background: #f9f5ff;">
-        <div class="card-body">
-          <h5 class="card-title text-secondary">Active Subscriptions</h5>
-          <h2 class="fw-bold" style="color: #5a0d69;"><%= @active_subscriptions %></h2>
-        </div>
-      </div>
-    </div>
+    <%= render partial: "card", locals: { title: "Total Buyers", value: @total_buyers } %>
+    <%= render partial: "card", locals: { title: "Total Plans", value: @total_plans } %>
+    <%= render partial: "card", locals: { title: "Total Revenue", value: number_with_delimiter(@total_revenue) + " PKR" } %>
+    <%= render partial: "card", locals: { title: "Active Subscriptions", value: @active_subscriptions } %>
   </div>
 
-  
 
+  <div class="text-center mb-3">
+    <%= render "link_button", name: "Manage Plans", path: admin_plans_path, extra_classes: "me-2" %>
+    <%= render "link_button", name: "Manage Features", path: admin_features_path, extra_classes: "me-2" %>
+    <%= render "link_button", name: "Add Usage", path: new_admin_usage_path, extra_classes: "me-2" %>
+    <%= render "link_button", name: "Edit Profile", path: edit_admin_profile_path, extra_classes: "" %>
+  </div>
 
 
   <div class="text-center">
-
-
-
-    <%= link_to "Manage Plans", admin_plans_path, 
-        class: "btn text-white me-2", 
-        style: "background-color: #5a0d69; border-radius: 8px;" %>
-
-    <%= link_to "Manage Features", admin_features_path, 
-        class: "btn text-white me-2", 
-        style: "background-color: #5a0d69; border-radius: 8px;" %>
-
-    <%= link_to "Add Usage", new_admin_usage_path, 
-        class: "btn text-white", 
-        style: "background-color: #5a0d69; border-radius: 8px;" %>
-
-
-         <%= link_to "Edit Profile", edit_admin_profile_path, 
-        class: "btn text-white me-2", 
-        style: "background-color: #5a0d69; border-radius: 8px;" %>
-
-       
-
+    <%= render "action_button", name: "Run Billing Cycle", path: admin_run_billing_path, method: :post, extra_classes: "me-2" %>
   </div>
-  <br>
-
-<div class="text-center">
-
-   <%= button_to "Run Billing Cycle", admin_run_billing_path, 
-        method: :post, 
-        class: "btn text-white me-2", 
-        style: "background-color: #5a0d69; border-radius: 8px;" %>
-        </div>
 </div>
