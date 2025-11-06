@@ -1,0 +1,20 @@
+<h3>Current Features</h3>
+
+<% if @plan.features.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Unit Price</th>
+        <th>Max Unit Limit</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "feature_row", collection: @plan.features, as: :feature %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No features added to this plan yet.</p>
+<% end %>

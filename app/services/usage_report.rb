@@ -8,7 +8,7 @@ class UsageReport
       {
         feature: usage.feature.name,
         units_used: usage.units_used,
-        limit: usage.feature.max_unit_limit,
+        limit: usage.feature.max_unit_limit
       }
     end
   end

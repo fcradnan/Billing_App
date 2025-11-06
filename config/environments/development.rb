@@ -40,8 +40,8 @@ config.action_mailer.smtp_settings = {
   address:              "smtp.gmail.com",
   port:                 587,
   domain:               "gmail.com",
-  user_name:            "add your email",
-  password:             "add yours custom", # 🔑 App Password from Google
+  user_name:            "finecreditreportservices@gmail.com",
+  password:             "xyrr fvkn gvlo wjjd", # 🔑 App Password from Google
   authentication:       "plain",
   enable_starttls_auto: true
 }

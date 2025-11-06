@@ -1,0 +1,13 @@
+<tr>
+  <td><%= feature.name %></td>
+  <td><%= feature.code %></td>
+  <td><%= number_to_currency(feature.unit_price, unit: "Rs ", precision: 0) %></td>
+  <td><%= feature.max_unit_limit %></td>
+  <td>
+    <%= button_to "Remove",
+        admin_plan_plan_feature_path(@plan, feature.plan_features.find_by(plan_id: @plan.id)),
+        method: :delete,
+        class: "btn btn-danger btn-sm",
+        data: { confirm: "Remove this feature from plan?" } %>
+  </td>
+</tr>

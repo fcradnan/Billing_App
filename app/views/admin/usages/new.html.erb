@@ -1,61 +1,83 @@
-<div class="d-flex justify-content-center align-items-center min-vh-100" style="background-color: #f8f9fa;">
-  <div class="card shadow-lg p-4" style="width: 500px;">
-    <h2 class="text-center mb-4 fw-bold" style="color: #5a0d69;">Add Usage</h2>
+<div class="container mt-5">
+  <h2>Add Usage</h2>
 
-    <%= form_with model: [:admin, @usage], local: true do |f| %>
-      <div class="mb-3">
-        <%= f.label :buyer_id, "Buyer", class: "form-label fw-semibold" %>
-        <%= f.collection_select :buyer_id, @buyers, :id, :name,
-              { prompt: "Select a buyer" },
-              class: "form-select", id: "buyer_select" %>
-      </div>
+  <%= form_with model: @usage, url: admin_usages_path, local: true, class: "needs-validation" do |f| %>
+    <div class="mb-3">
+      <%= f.label :buyer_id, "Select Buyer" %>
+      <%= f.select :buyer_id, @buyers.map { |b| [b.name, b.id] }, { prompt: "Choose Buyer" }, class: "form-select", id: "buyer_select" %>
+    </div>
 
-      <div class="mb-3">
-        <%= f.label :feature_id, "Feature", class: "form-label fw-semibold" %>
-        <%= f.select :feature_id, [],
-              { prompt: "Select a feature" },
-              class: "form-select", id: "feature_select" %>
-      </div>
+    <div class="mb-3">
+      <%= f.label :plan_id, "Select Plan" %>
+      <%= f.select :plan_id, [], { prompt: "Choose Plan" }, class: "form-select", id: "plan_select" %>
+    </div>
 
-      <div class="mb-3">
-        <%= f.label :units_used, "Units Used", class: "form-label fw-semibold" %>
-        <%= f.number_field :units_used, class: "form-control", placeholder: "Enter number of units" %>
-      </div>
+    <div class="mb-3">
+      <%= f.label :feature_id, "Select Feature" %>
+      <%= f.select :feature_id, [], { prompt: "Choose Feature" }, class: "form-select", id: "feature_select" %>
+    </div>
 
-      <div class="text-center">
-        <%= f.submit "Add Usage", class: "btn text-white px-4", style: "background-color: #5a0d69;" %>
-      </div>
-    <% end %>
-  </div>
+    <div class="mb-3">
+      <%= f.label :units_used, "Units Used" %>
+      <%= f.number_field :units_used, class: "form-control" %>
+    </div>
+
+    <%= f.submit "Add Usage", class: "btn text-white", style: "background-color: #5a0d69;" %>
+  <% end %>
 </div>
 
+
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const buyerSelect = document.getElementById("buyer_select");
-    const featureSelect = document.getElementById("feature_select");
+document.addEventListener("turbo:load", initializeUsageForm);
+document.addEventListener("DOMContentLoaded", initializeUsageForm);
 
-    buyerSelect.addEventListener("change", function() {
-      const buyerId = this.value;
-      featureSelect.innerHTML = '<option value="">Loading...</option>';
+function initializeUsageForm() {
+  const buyerSelect = document.getElementById("buyer_select");
+  const planSelect = document.getElementById("plan_select");
+  const featureSelect = document.getElementById("feature_select");
 
-      if (buyerId) {
-        fetch(`/admin/buyers/${buyerId}/features.json`)
-          .then(response => response.json())
-          .then(features => {
-            featureSelect.innerHTML = '<option value="">Select a feature</option>';
-            features.forEach(feature => {
-              const option = document.createElement("option");
-              option.value = feature.id;
-              option.textContent = feature.name;
-              featureSelect.appendChild(option);
-            });
-          })
-          .catch(() => {
-            featureSelect.innerHTML = '<option value="">Error loading features</option>';
-          });
-      } else {
-        featureSelect.innerHTML = '<option value="">Select a buyer first</option>';
-      }
-    });
+  if (!buyerSelect || !planSelect || !featureSelect) return; 
+
+  buyerSelect.addEventListener("change", () => {
+    const buyerId = buyerSelect.value;
+    if (!buyerId) return;
+
+    planSelect.innerHTML = '<option>Loading...</option>';
+
+    fetch(`/admin/usages/plans_for_buyer?buyer_id=${buyerId}`)
+      .then(res => res.json())
+      .then(plans => {
+        planSelect.innerHTML = '<option value="">Choose Plan</option>';
+        plans.forEach(plan => {
+          planSelect.innerHTML += `<option value="${plan.id}">${plan.name}</option>`;
+        });
+        featureSelect.innerHTML = '<option value="">Choose Feature</option>';
+      })
+      .catch(err => {
+        console.error("Error fetching plans:", err);
+        planSelect.innerHTML = '<option>Error loading plans</option>';
+      });
   });
+
+  planSelect.addEventListener("change", () => {
+    const planId = planSelect.value;
+    if (!planId) return;
+
+    featureSelect.innerHTML = '<option>Loading...</option>';
+
+    fetch(`/admin/usages/features_for_plan?plan_id=${planId}`)
+      .then(res => res.json())
+      .then(features => {
+        featureSelect.innerHTML = '<option value="">Choose Feature</option>';
+        features.forEach(feature => {
+          featureSelect.innerHTML += `<option value="${feature.id}">${feature.name}</option>`;
+        });
+      })
+      .catch(err => {
+        console.error("Error fetching features:", err);
+        featureSelect.innerHTML = '<option>Error loading features</option>';
+      });
+  });
+}
 </script>

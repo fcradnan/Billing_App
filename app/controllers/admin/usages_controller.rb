@@ -12,7 +12,7 @@ module Admin
     def create
       authorize Usage
       buyer = BuyerUser.find(usage_params[:buyer_id])
-      subscription = buyer.active_subscription
+      subscription = buyer.subscriptions.find_by(plan_id: usage_params[:plan_id], status: "active")
 
       if subscription.nil?
         redirect_to new_admin_usage_path, alert: "This buyer has no active subscription." and return
@@ -36,7 +36,6 @@ module Admin
       end
     end
 
-
     def plans_for_buyer
       buyer = BuyerUser.find(params[:buyer_id])
       plans = Plan.joins(:subscriptions)
@@ -45,8 +44,6 @@ module Admin
       render json: plans.select(:id, :name)
     end
 
-
-  
     def features_for_plan
       plan = Plan.find(params[:plan_id])
       render json: plan.features.select(:id, :name)

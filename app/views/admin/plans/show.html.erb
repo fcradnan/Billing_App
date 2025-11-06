@@ -1,58 +1,27 @@
-<h2>Plan: <%= @plan.name %></h2>
-<p>
-  <strong>Monthly Fee:</strong> <%= number_to_currency(@plan.monthly_fee, unit: "Rs ", precision: 0) %>
-</p>
+<div class="container my-5">
+  <h2>Plan: <%= @plan.name %></h2>
+  <p><strong>Monthly Fee:</strong> <%= number_to_currency(@plan.monthly_fee, unit: "Rs ", precision: 0) %></p>
 
+  <hr>
 
-<hr>
+  <%= render "features_table", plan: @plan %>
 
-<h3>Current Features</h3>
-<% if @plan.features.any? %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Code</th>
-        <th>Unit Price</th>
-        <th>Max Unit Limit</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @plan.features.each do |feature| %>
-        <tr>
-          <td><%= feature.name %></td>
-          <td><%= feature.code %></td>
-          <td><%= feature.unit_price %></td>
-          <td><%= feature.max_unit_limit %></td>
-          <td>
-            <%= button_to "Remove", admin_plan_plan_feature_path(@plan, feature.plan_features.find_by(plan_id: @plan.id)),
-                method: :delete,
-                class: "btn btn-danger btn-sm",
-                data: { confirm: "Remove this feature from plan?" } %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No features added to this plan yet.</p>
-<% end %>
+  <hr>
 
-<hr>
+  <h3>Add New Feature to Plan</h3>
 
-<h3>Add New Feature to Plan</h3>
+  <%= form_with url: admin_plan_plan_features_path(@plan), method: :post, local: true do %>
+    <div class="mb-3">
+      <%= label_tag :feature_id, "Select Feature" %>
+      <%= select_tag :feature_id,
+            options_from_collection_for_select(@available_features, :id, :name),
+            class: "form-select" %>
+    </div>
 
-<%= form_with url: admin_plan_plan_features_path(@plan), method: :post, local: true do %>
-  <div class="mb-3">
-    <%= label_tag :feature_id, "Select Feature" %>
-    <%= select_tag :feature_id,
-          options_from_collection_for_select(@available_features, :id, :name),
-          class: "form-select" %>
-  </div>
+    <%= submit_tag "Add Feature", class: "btn btn-primary" %>
+  <% end %>
 
-  <%= submit_tag "Add Feature", class: "btn btn-primary" %>
-<% end %>
+  <hr>
 
-<hr>
-<%= link_to "Back to Plans", admin_plans_path, class: "btn btn-secondary mt-3" %>
+  <%= render "admin/shared/back_button", path: admin_plans_path %>
+</div>
