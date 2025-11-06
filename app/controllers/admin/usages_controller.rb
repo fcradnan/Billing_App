@@ -3,21 +3,14 @@ module Admin
     def new
       authorize Usage
       @usage = Usage.new
-      
       @buyers = BuyerUser.joins(:subscriptions)
                          .where(subscriptions: { status: "active" })
                          .distinct
-      
       @features = []
     end
 
     def create
       authorize Usage
-
-      if usage_params[:buyer_id].blank?
-        redirect_to new_admin_usage_path, alert: "Please select a buyer." and return
-      end
-
       buyer = BuyerUser.find(usage_params[:buyer_id])
       subscription = buyer.active_subscription
 
@@ -44,23 +37,25 @@ module Admin
     end
 
 
-    def features_for_buyer
+    def plans_for_buyer
       buyer = BuyerUser.find(params[:buyer_id])
-      subscription = buyer.active_subscription
+      plans = Plan.joins(:subscriptions)
+                .where(subscriptions: { user_id: buyer.id, status: "active" })
+                  .distinct
+      render json: plans.select(:id, :name)
+    end
 
-      if subscription && subscription.plan
-        @features = subscription.plan.features
-      else
-        @features = []
-      end
 
-      render json: @features.select(:id, :name)
+  
+    def features_for_plan
+      plan = Plan.find(params[:plan_id])
+      render json: plan.features.select(:id, :name)
     end
 
     private
 
     def usage_params
-      params.require(:usage).permit(:buyer_id, :feature_id, :units_used)
+      params.require(:usage).permit(:buyer_id, :plan_id, :feature_id, :units_used)
     end
   end
 end
